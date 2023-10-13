@@ -26,7 +26,6 @@ def build_location_string(location):
     location_string = f'circle:{longitude},{latitude},{radius}'
     return location_string
 
-
 def request_poi(location):
     location_string = build_location_string(location)
     poi_query = {'categories': poi_categories, 'filter': location_string, 'limit': 5, 'apiKey': api_key}
@@ -37,9 +36,3 @@ def request_poi(location):
     
     except Exception as e:
         print(e)
-
-def main():
-    response = request_poi(poi_location)
-    pprint(response)
-
-main()
