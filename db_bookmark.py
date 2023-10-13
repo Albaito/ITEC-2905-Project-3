@@ -1,30 +1,9 @@
-import datetime
 import sqlite3
 
 db = 'storage.sqlite'
 
-class Result:  # Placeholder class
-    def __init__(self, date, min_temp, max_temp, id=None, ):
-        id = id
-        timestamp = date
-        minimum_temperature = min_temp
-
-    def update(self):
-        if self.id:
-            pass
-        else:
-            pass
-
-    def save(self):
-
-        insert_weather_sql = 'insert into weather (temperature, weather) VALUES (?, ?, ?)'
-
-        with sqlite3.connect('storage.sqlite') as con:
-            con.execute(insert_weather_sql, (self))
-
-
 def create_tables():
-    create_table_bookmark_sql = 'create table if not exists bookmark (id integer primary key not null, date_retrieved timestamp)'
+    create_table_bookmark_sql = 'create table if not exists bookmarks (id integer primary key not null, date_retrieved timestamp)'
     create_table_weather_sql = 'create table if not exists weather (id integer, minimum_temperature integer not null, maximum_temperature integer not null, weather text not null, foreign key (id) references cache(id) on delete cascade)'
     create_table_POI_sql = 'create table if not exists point_of_interest (id integer, name text,  lattitude float not null, longtitude float not null, link1 text, picture_link2 text, video_link text, foreign key (id) references caches(id) on delete cascade)'
     create_table_sql_statments = [create_table_bookmark_sql, create_table_weather_sql, create_table_POI_sql]
@@ -41,6 +20,9 @@ def create_tables():
         con.close()
     
 create_tables()
+
+def get_all_bookmarks():
+    sget_all_bookmarks_sql = 'select * from bookmark'
 
 def delete_all_data():
     delete_all_cache_sql = 'drop table if exists cache'
