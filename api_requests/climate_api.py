@@ -1,25 +1,14 @@
 import requests
 from datetime import datetime
 from datetime import timedelta
+from geocode_api import request_geocode
 from pprint import pprint
 
 climate_url = 'https://archive-api.open-meteo.com/v1/archive?'
-geocode_url = 'https://geocoding-api.open-meteo.com/v1/search'
 
 location = 'berlin'
 date_string = '2023-01-06'
 daily_data = 'temperature_2m_min,temperature_2m_max,temperature_2m_mean,precipitation_sum,precipitation_hours'
-
-# call geocode API to get detailed location info from a simple input like "berlin"
-def request_geocode(loc):
-    geocode_query = {'name': loc}
-    try:
-        geocode_response = requests.get(geocode_url, params=geocode_query)
-        geocode_response.raise_for_status()
-        return geocode_response.json()
-    
-    except Exception as e:
-        print(e)
 
 # extract latitude, longitude, and timezone from the geocode JSON
 def get_latitude(geo):

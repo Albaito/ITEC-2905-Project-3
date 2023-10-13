@@ -10,7 +10,7 @@ poi_location = 'circle:-93.2638,44.96,5000'
 
 
 def request_poi(location):
-    poi_query = {'categories': poi_categories, 'filter': location, 'limit': 10, 'apiKey': api_key}
+    poi_query = {'categories': poi_categories, 'filter': location, 'limit': 5, 'apiKey': api_key}
     try:
         poi_response = requests.get(poi_url, params=poi_query)
         poi_response.raise_for_status()
