@@ -20,7 +20,7 @@ YOUTUBE_API_SERVICE_NAME = 'youtube'  # in this program we specifically want you
 YOUTUBE_API_VERSION = 'v3'
 
 
-def cat_video(category):
+def city_video(category):
     try:
         # build function imported from google client library. IT uses YouTube, version 3, the API_KEY
         # https://googleapis.github.io/google-api-python-client/docs/start.html for documentation
@@ -42,11 +42,16 @@ def cat_video(category):
         title = first_result['snippet']['title']
         video_id = first_result['id']['videoId']
 
+        # https://www.youtube.com/watch?v=6Uxxe2o_n0A
+        video_url = f'https://www.youtube.com/watch?v={video_id}'
+        print(video_url)
+
         return {'title': title, 'video_id': video_id}
+
 
     except Exception as e:
         print(e)
 
 
-if __name__ == '__main__':
-    print(cat_video('cities'))
+if __name__ == '__main__':        # this calls main function
+    print(city_video('cities'))
