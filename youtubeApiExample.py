@@ -1,4 +1,4 @@
-# Get a cat video from YouTube.
+# Get a cities video from YouTube.
 # Set the YOUTUBE_API_KEY as an environment variable
 
 # Helpful Google example: https://github.com/youtube/api-samples/blob/master/python/search.py
