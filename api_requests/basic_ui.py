@@ -38,11 +38,11 @@ def get_tables():
     poi_list = get_poi_list(location)
     climate_table = build_climate_table(climate_list)
     poi_table = build_poi_table(poi_list)
-    print(poi_table)
     return climate_table, poi_table
 
 def print_tables():
     climate_table, poi_table = get_tables()
+    print('\n')
     print('Here is what the weather was like a year before that date: ')
     print(climate_table)
     print('\n')
