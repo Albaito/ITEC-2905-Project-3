@@ -28,13 +28,17 @@ def get_all_bookmarks():
     try:
         with sqlite3.connect(db) as con:
             cur = con.cursor()
-            rows = cur.execute(get_all_bookmarks)
-        print(rows)
+            rows = cur.execute(get_all_bookmarks_sql)
+        
+        bookmarks = [r['minimum_temperature',]]
+
+        for r in rows:
+            Bookmark(r[''])
     except sqlite3.DataError:
         print('Uh oh')
     finally:
         con.close()
-        return 
+        return bookmarks
 
 def delete_all_data():
     delete_all_cache_sql = 'delete from bookmarks'
@@ -74,3 +78,4 @@ def get_all_climate_data():
     con.close()
     return climate_data
 
+get_all_bookmarks()
