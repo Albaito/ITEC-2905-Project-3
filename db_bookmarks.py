@@ -1,6 +1,6 @@
 import sqlite3
 from bookmarks import Bookmark
-from POI import POI
+from api_requests.class_defs import PointOfInterest
 
 db = 'storage.sqlite'
 
@@ -35,17 +35,17 @@ def get_all_bookmarks():
         
         bookmarks = []
 
-        POIs = get_all_POIs()
-
         for row in rows:
             bookmark = Bookmark(row['low'], row['high'], row['precipitation_amount'], row['precipitation_duration'])
             bookmark.id = row['id']
-            
-            
-            index = 0
-            while POIs[index].id == bookmark.id:
-                index += 1
-                bookmark.POI1
+    
+            POIS = get_POIs_by_id(bookmark.id)
+            bookmark.POI1 = POIS[0]
+            bookmark.POI2 = POIS[1]
+            bookmark.POI3 = POIS[2]
+            bookmark.POI4 = POIS[3]
+            bookmark.POI5 = POIS[4] # There should always be 5 POIs per location so this seemed simpler than a 3 tiered solution
+            # This probably couldbe done with a for each loop, but need to get it done
 
             bookmarks.append(bookmark)
     except sqlite3.DataError:
@@ -53,6 +53,21 @@ def get_all_bookmarks():
     finally:
         con.close()
         return bookmarks
+
+
+def get_POIs_by_id(id):
+    get_POI_by_id_sql = ''' select * from point_of_interests wheere id = ? '''
+
+    con = open_db_connection()
+
+    rows = con.execute(get_POI_by_id_sql, (id ,) )
+
+    poi_list = []
+    for row in rows:
+        point_of_interest = PointOfInterest(row['name'], row['city'], row['lattitude'], row['longtitude'], row['lattitude'])
+        poi_list.append(point_of_interest)
+    con.close()
+    return poi_list
 
 
 def get_all_POIs():
@@ -66,7 +81,7 @@ def get_all_POIs():
             pois = []
 
             for row in rows:
-                point_of_interest = POI(row['name'], row['city'], row['lattitude'], row['longtitude'], row['id'])
+                point_of_interest = PointOfInterest(row['name'], row['city'], row['lattitude'], row['longtitude'], row['id'])
                 pois.append(point_of_interest)
     except Exception as e:
         print(e)
@@ -111,5 +126,17 @@ def get_all_climate_data():
     con.close()
     return climate_data
 
+def open_db_connection():
+    try:
+        db = 'storage.sqlite'
 
-print(get_all_POIs())
+        con = sqlite3.connect(db)
+
+    except sqlite3.DatabaseError:
+        print(f'Error - Database: {db} is missing')
+    finally:
+        return con
+
+
+
+print(get_all_bookmarks())
