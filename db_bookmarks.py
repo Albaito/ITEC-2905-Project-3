@@ -1,12 +1,13 @@
 import sqlite3
 from bookmarks import Bookmark
+from POI import POI
 
 db = 'storage.sqlite'
 
 def create_tables():
-    create_table_bookmark_sql = 'create table if not exists bookmarks (id integer primary key not null, date_retrieved timestamp)'
-    create_table_climate_sql = 'create table if not exists climate (id integer, minimum_temperature integer not null, maximum_temperature integer not null, weather text not null, foreign key (id) references cache(id) on delete cascade)'
-    create_table_POI_sql = 'create table if not exists point_of_interests (id integer, name text,  lattitude float not null, longtitude float not null, link1 text, picture_link2 text, video_link text, foreign key (id) references caches(id) on delete cascade)'
+    create_table_bookmark_sql = 'create table if not exists bookmarks (id integer primary key not null)'
+    create_table_climate_sql = 'create table if not exists climate (id integer, day int, low integer not null, high integer not null, precipitation_amount float, precipitation_duration float, foreign key (id) references cache(id) on delete cascade)'
+    create_table_POI_sql = 'create table if not exists point_of_interests (id integer, name text, city text not null, lattitude float not null, longtitude float not null, link text, picture_link text, video_link text, foreign key (id) references caches(id) on delete cascade)'
     create_table_sql_statments = [create_table_bookmark_sql, create_table_climate_sql, create_table_POI_sql]
 
     try:
@@ -20,25 +21,60 @@ def create_tables():
         con.commit()
         con.close()
     
+
 create_tables()
 
+
 def get_all_bookmarks():
-    get_all_bookmarks_sql = 'select * from bookmarks, climate, point_of_interests'
+    get_all_bookmarks_sql = 'select id, day, low, high, precipitation_amount, precipitation_duration, name, city, lattitude, longtitude, link, climate, picture_link, video_link from bookmarks join climate on bookmarks.id = climate.id join point_of_interests on bookmarks.id = climate.id'
 
     try:
         with sqlite3.connect(db) as con:
             cur = con.cursor()
             rows = cur.execute(get_all_bookmarks_sql)
         
-        bookmarks = [r['minimum_temperature',]]
+        bookmarks = []
 
-        for r in rows:
-            Bookmark(r[''])
+        POIs = get_all_POIs()
+
+        for row in rows:
+            bookmark = Bookmark(row['low'], row['high'], row['precipitation_amount'], row['precipitation_duration'])
+            bookmark.id = row['id']
+            
+            
+            index = 0
+            while POIs[index].id == bookmark.id:
+                index += 1
+                bookmark.POI1
+
+            bookmarks.append(bookmark)
     except sqlite3.DataError:
         print('Uh oh')
     finally:
         con.close()
         return bookmarks
+
+
+def get_all_POIs():
+    get_all_POIs_sql = 'select * from point_of_interests order by id' 
+
+    try:
+        with sqlite3.connect(db) as con:
+            cur = con.cursor()
+            rows = cur.execute(get_all_POIs_sql)
+
+            pois = []
+
+            for row in rows:
+                point_of_interest = POI(row['name'], row['city'], row['lattitude'], row['longtitude'], row['id'])
+                pois.append(point_of_interest)
+    except Exception as e:
+        print(e)
+    finally:
+        con.close()
+        return pois
+    
+
 
 def delete_all_data():
     delete_all_cache_sql = 'delete from bookmarks'
@@ -53,9 +89,6 @@ def delete_all_data():
         con.commit()
         con.close()  
 
-def insert_new_row():
-    ''' Function inserts  '''
-    insert_row_sql = 'insert into cache values(?, ?),'
 
 def get_all_climate_data():
     ''' gathers all rows of data from the climate table and returns them as objects in a list '''
@@ -78,4 +111,5 @@ def get_all_climate_data():
     con.close()
     return climate_data
 
-get_all_bookmarks()
+
+print(get_all_POIs())

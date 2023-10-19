@@ -1,25 +1,30 @@
 import sqlite3
 
 class Bookmark:  # Placeholder class
-    def __init__(self, date, min_temp, max_temp, id=None, ):
-        id = id
-        date = date
-        minimum_temperature = min_temp
-        maximum_temperature = max_temp
-
-    def update(self):
-        if self.id:
-            pass # TODO: should return with message saying bookmark is already in DB
-        else:
-            self.add_bookmark(self)
+    def __init__(self, low, high, precipitation_amount, precipitation_duration, POI1=None, POI2=None, POI3=None, POI4=None, POI5=None, id=None):
+        self.id = id
+        self.low = low
+        self.high = high
+        self.precipitation_amount = precipitation_amount
+        self.precipitation_duration = precipitation_duration
+        self.POI1 = POI1 # POI =  Point of Interest
+        self.POI2 = POI2
+        self.POI3 = POI3
+        self.POI4 = POI4
+        self.POI5 = POI5
+        
 
     def add_bookmark(self):
         ''' function saves bookmark to database '''
-        insert_weather_sql = 'insert into weather (temperature, weather) VALUES (?, ?, ?)'
+        if self.id:
+            insert_bookmarks_sql = 'insert into bookmarks'
 
-        with sqlite3.connect('storage.sqlite') as con:
-            con.execute(insert_weather_sql, (self))
-        con.close()
+            with sqlite3.connect('storage.sqlite') as con:
+                con.execute(insert_bookmarks_sql, (self.id))
+            con.close()
+        else:
+            print('')
+
 
     def delete_bookmark(self):
         if self.id:
@@ -32,3 +37,4 @@ class Bookmark:  # Placeholder class
 
         if deleted_count == 0:
             raise sqlite3.Er
+        
