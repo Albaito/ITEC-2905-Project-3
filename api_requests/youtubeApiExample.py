@@ -1,3 +1,5 @@
+
+"""This file make the youTube API call"""
 # Get a cities video from YouTube.
 # Set the YOUTUBE_API_KEY as an environment variable
 
@@ -34,24 +36,11 @@ def city_video(category):
             safeSearch='strict'
         ).execute()
 
-        pprint(search_response)
+        # pprint(search_response)
 
         # getting data, extract data, retun data
         first_result = search_response.get('items', [])[0]
-
-        title = first_result['snippet']['title']
-        video_id = first_result['id']['videoId']
-
-        # https://www.youtube.com/watch?v=6Uxxe2o_n0A
-        video_url = f'https://www.youtube.com/watch?v={video_id}'
-        print(video_url)
-
-        return {'title': title, 'video_id': video_id}
-
+        return first_result
 
     except Exception as e:
         print(e)
-
-
-if __name__ == '__main__':        # this calls main function
-    print(city_video('cities'))
