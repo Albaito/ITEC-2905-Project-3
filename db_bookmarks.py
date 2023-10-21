@@ -6,7 +6,7 @@ from api_requests.class_defs import ClimateDay
 db = 'storage.sqlite'
 
 def create_tables():
-    create_table_bookmark_sql = 'create table if not exists bookmarks (id integer primary key not null)'
+    create_table_bookmark_sql = 'create table if not exists bookmarks (id integer primary key not null, date_retrieved string not null)'
     create_table_climate_sql = 'create table if not exists climate (id integer, day int, low integer not null, high integer not null, precipitation_amount float, precipitation_duration float, foreign key (id) references cache(id) on delete cascade)'
     create_table_POI_sql = 'create table if not exists point_of_interests (id integer, name text, city text not null, lattitude float not null, longtitude float not null, link text, picture_link text, video_link text, foreign key (id) references caches(id) on delete cascade)'
     create_table_sql_statments = [create_table_bookmark_sql, create_table_climate_sql, create_table_POI_sql]
@@ -43,6 +43,9 @@ def get_all_bookmarks():
             POIS = get_POIs_by_id(bookmark.id)  # Iterable list to loop through POis
             bookmark.points_of_interest = POIS
 
+            climate_forecast = get_climate_by_id(bookmark.id)   # Iterable list to loop through climate data
+            bookmark.climate_forecast = climate_forecast
+
             bookmarks.append(bookmark)
     except sqlite3.DataError:
         print('Uh oh')
@@ -63,7 +66,7 @@ def get_climate_by_id(id):
         day = ClimateDay(row['high'], row['low'], row['precipitation_amount'], row['precipitation_duration'])
         days.append(day)
     con.close()
-    
+
     return days
 
 
@@ -150,5 +153,6 @@ def open_db_connection():
         return con
 
 
+howdy = Bookmark()
 
-print(get_all_bookmarks())
+howdy.create_bookmark()
