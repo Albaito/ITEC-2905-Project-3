@@ -1,6 +1,7 @@
 import sqlite3
 from bookmarks import Bookmark
 from api_requests.class_defs import PointOfInterest
+from api_requests.class_defs import ClimateDay
 
 db = 'storage.sqlite'
 
@@ -39,13 +40,8 @@ def get_all_bookmarks():
             bookmark = Bookmark(row['low'], row['high'], row['precipitation_amount'], row['precipitation_duration'])
             bookmark.id = row['id']
     
-            POIS = get_POIs_by_id(bookmark.id)
-            bookmark.POI1 = POIS[0]
-            bookmark.POI2 = POIS[1]
-            bookmark.POI3 = POIS[2]
-            bookmark.POI4 = POIS[3]
-            bookmark.POI5 = POIS[4] # There should always be 5 POIs per location so this seemed simpler than a 3 tiered solution
-            # This probably couldbe done with a for each loop, but need to get it done
+            POIS = get_POIs_by_id(bookmark.id)  # Iterable list to loop through POis
+            bookmark.points_of_interest = POIS
 
             bookmarks.append(bookmark)
     except sqlite3.DataError:
@@ -55,8 +51,24 @@ def get_all_bookmarks():
         return bookmarks
 
 
+def get_climate_by_id(id):
+    get_climate_by_id_sql = ''' select * from climate where id = ? order by day'''
+
+    con = open_db_connection()
+
+    rows = con.execute(get_climate_by_id, (id ,) )
+
+    days = []
+    for row in rows:
+        day = ClimateDay(row['high'], row['low'], row['precipitation_amount'], row['precipitation_duration'])
+        days.append(day)
+    con.close()
+    
+    return days
+
+
 def get_POIs_by_id(id):
-    get_POI_by_id_sql = ''' select * from point_of_interests wheere id = ? '''
+    get_POI_by_id_sql = ''' select * from point_of_interests wheere id = ? order by name'''
 
     con = open_db_connection()
 
@@ -133,7 +145,7 @@ def open_db_connection():
         con = sqlite3.connect(db)
 
     except sqlite3.DatabaseError:
-        print(f'Error - Database: {db} is missing')
+        print(f'Error - Database: {db} is missing!')
     finally:
         return con
 
