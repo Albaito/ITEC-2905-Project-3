@@ -1,13 +1,19 @@
+import datetime
 from poi_output import compile_poi_data
 from climate_output import compile_climate_data
 from prettytable import PrettyTable
 
 def get_location():
-    location = input('Please enter your destination city: ')
+    location = input('Please enter your destination city or country: ')
     return location
 
 def get_date():
     date = input('Please enter the date of your trip (use YYYY-MM-DD format): ')
+    try:
+        datetime.date.fromisoformat(date)
+    except ValueError:
+        print('Incorrect date format. Please use YYYY-MM-DD.')
+        date = input('Enter date: ')
     return date
 
 def get_climate_list(location, date):
