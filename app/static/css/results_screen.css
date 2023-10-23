@@ -1,0 +1,42 @@
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+
+.container2 {
+    display: flex;
+    width: 80%; /* You can adjust the overall width of the container */
+    margin: 20px auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.container3 {
+    display: flex;
+    width: 80%; /* You can adjust the overall width of the container */
+    margin: 20px auto;
+    background-color: #f0f0f0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.list_of_poi {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #e0e0e0;
+    overflow: auto;
+}
+
+.map_showing_poi {
+    width: 100%;
+    margin-left: 10%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #c0c0c0;
+}

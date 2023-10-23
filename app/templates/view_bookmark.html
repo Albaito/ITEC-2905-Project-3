@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookmark</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookmarks.css') }}">
+
+    <div class="container">
+        <a href="{{ url_for('index')}}">Homepage</a>
+        <br><br>
+        <img src="{{ url_for('static', filename='imgs/history.jpg') }}" class="img-fluid mb-4" alt="Vacation Image">
+        <h2 >Bookmark History</h2>
+    
+        <div class="card-deck">
+            <!-- Replace this with your actual list of bookmarks from the server -->
+            {% for bookmark in bookmarks %}
+            
+                <div class="card">
+                    <a href="{{url_for('results_screen', location=bookmark.location, date=bookmark.date)}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ bookmark.location }}</h5>
+                        <p class="card-text">{{ bookmark.date.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    </a>
+                </div>
+            
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

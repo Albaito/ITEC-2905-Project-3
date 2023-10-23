@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}" />
+    <title>Input Screen</title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/results_screen.css') }}" />
+
+    <div class="container">
+      <a href="{{ url_for('index')}}">Homepage</a>
+      <h1>{{ location }}</h1>
+
+      <div class="container2">
+        <div class="list_of_poi">
+          <h2>List of POIs</h2>
+
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Categories</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for feature in pio_data.features %}
+                <tr>
+                  <td>{{ feature.properties.name }}</td>
+                  <td>{{ feature.properties.country }}</td>
+                  <td>{{ feature.properties.city }}</td>
+                  <td>{{ feature.properties.lat }}</td>
+                  <td>{{ feature.properties.lon }}</td>
+                  <td>{{ feature.properties.categories|join(', ') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="container3">
+        <div class="list_of_poi">
+          <h2>Climate Data</h2>
+
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Min Temperature (°C)</th>
+                <th>Max Temperature (°C)</th>
+                <th>Mean Temperature (°C)</th>
+                <th>Precipitation Sum (mm)</th>
+                <th>Precipitation Hours (h)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for date in climate_data.daily.time %}
+                <tr>
+                  <td>{{ date }}</td>
+                  <td>{{ climate_data.daily.temperature_2m_min[loop.index0] }}</td>
+                  <td>{{ climate_data.daily.temperature_2m_max[loop.index0] }}</td>
+                  <td>{{ climate_data.daily.temperature_2m_mean[loop.index0] }}</td>
+                  <td>{{ climate_data.daily.precipitation_sum[loop.index0] }}</td>
+                  <td>{{ climate_data.daily.precipitation_hours[loop.index0] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="container3">
+        <div class="list_of_poi">
+          <h2>Video</h2>
+          {% for video in youtube_videos %}
+            <div class="video-frame">
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video['videoId'] }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
