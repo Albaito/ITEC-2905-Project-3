@@ -55,3 +55,10 @@ def request_climate(loc, date_string):
     
     except Exception as e:
         print(e)
+
+def main():
+    response = request_climate(location, date_string)
+
+    pprint(response)
+
+main()
