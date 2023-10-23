@@ -20,7 +20,11 @@ def get_longitude(geo):
     return long
 
 def get_timezone(geo):
-    tz = geo['results'][0]['timezone']
+    # hardcode a timezone for UTC in the event that the JSON doesn't include a timezone (such as when a country is entered as a location)
+    try:
+        tz = geo['results'][0]['timezone']
+    except KeyError:
+        tz = 'Europe/London'
     return tz
 
 # convert date string to date object
