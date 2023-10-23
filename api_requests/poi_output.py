@@ -3,7 +3,11 @@ from pprint import pprint
 from class_defs import PointOfInterest
 
 def get_name(response, count):
-    poi_name = response['features'][count]['properties']['datasource']['raw']['name:en']
+    # not all POIs have a 'name:en' value, so this will pull 'name' if there is a KeyError
+    try: 
+        poi_name = response['features'][count]['properties']['datasource']['raw']['name:en']
+    except KeyError:
+        poi_name = response['features'][count]['properties']['datasource']['raw']['name']
     return poi_name
 
 def get_city(response, count):
