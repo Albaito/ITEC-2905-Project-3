@@ -37,11 +37,11 @@ def get_all_bookmarks():
         bookmarks = []
 
         for row in rows:
-            bookmark = Bookmark(row['low'], row['high'], row['precipitation_amount'], row['precipitation_duration'])
+            bookmark = Bookmark()
             bookmark.id = row['id']
     
-            POIS = get_POIs_by_id(bookmark.id)  # Iterable list to loop through POis
-            bookmark.points_of_interest = POIS
+            points_of_interest = get_POIs_by_id(bookmark.id)  # Iterable list to loop through POis
+            bookmark.points_of_interest = points_of_interest
 
             climate_forecast = get_climate_by_id(bookmark.id)   # Iterable list to loop through climate data
             bookmark.climate_forecast = climate_forecast
@@ -59,7 +59,7 @@ def get_climate_by_id(id):
 
     con = open_db_connection()
 
-    rows = con.execute(get_climate_by_id, (id ,) )
+    rows = con.execute(get_climate_by_id_sql, (id ,) )
 
     days = []
     for row in rows:
@@ -107,6 +107,7 @@ def get_all_POIs():
 
 
 def delete_all_data():
+    ''' function deletes all rows in bookmarks table which cascades to climate and points_of_interest'''
     delete_all_cache_sql = 'delete from bookmarks'
 
     try:
@@ -122,12 +123,12 @@ def delete_all_data():
 
 def get_all_climate_data():
     ''' gathers all rows of data from the climate table and returns them as objects in a list '''
-    get_all_climate_data_sql = 'select * from climate'
+    get_all_climate_data_sql = 'select * from climate order by id'
 
     with sqlite3.connect('storage.sqlite') as con:
-        con.row_factory = sqlite3.Row # allows getting of data per column
+        con.row_factory = sqlite3.Row # allows getting of data by column
         cursor = con.cursor()
-        rows = cursor.execute(get_all_climate_data)
+        rows = cursor.execute(get_all_climate_data_sql)
 
         climate_data = []
         if climate_data:
@@ -141,7 +142,10 @@ def get_all_climate_data():
     con.close()
     return climate_data
 
+
 def open_db_connection():
+    ''' opens database connection 
+    and returns a connection object'''
     try:
         db = 'storage.sqlite'
 
@@ -151,8 +155,3 @@ def open_db_connection():
         print(f'Error - Database: {db} is missing!')
     finally:
         return con
-
-
-howdy = Bookmark()
-
-howdy.create_bookmark()
