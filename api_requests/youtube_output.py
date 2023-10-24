@@ -1,6 +1,6 @@
 """This file processes the result from the YOuTube API """
 
-from youtubeApiExample import city_video
+from youtube_api import city_video
 
 
 # getting data, extract data, return data
