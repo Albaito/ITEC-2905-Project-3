@@ -1,4 +1,6 @@
 import datetime
+from datetime import datetime
+from datetime import date
 from poi_output import compile_poi_data
 from climate_output import compile_climate_data
 from prettytable import PrettyTable
@@ -8,13 +10,37 @@ def get_location():
     return location
 
 def get_date():
-    date = input('Please enter the date of your trip (use YYYY-MM-DD format): ')
+    date_string = input('Please enter the date of your trip (use YYYY-MM-DD format): ')
+    format_valid = date_format_validation(date_string)
+    while format_valid is not True:
+        date_string = input('Invalid format. Please enter date in YYYY-MM-DD format: ')
+        format_valid = date_format_validation(date_string)
+        if format_valid:
+            break
+    
+    days_diff = date_range_validation(date_string)
+    while days_diff > 365:
+        date_string = input('Please enter a date within the next year: ')
+        days_diff = date_range_validation(date_string)
+        if days_diff < 365:
+            break
+    return date_string
+
+def date_format_validation(date_string):
     try:
-        datetime.date.fromisoformat(date)
+        date.fromisoformat(date_string)
+        date_valid = True
     except ValueError:
-        print('Incorrect date format. Please use YYYY-MM-DD.')
-        date = input('Enter date: ')
-    return date
+        date_valid = False
+    return date_valid
+
+def date_range_validation(date_string):
+    today_date = str(date.today())
+    today_date_formatted = datetime.strptime(today_date, '%Y-%m-%d')
+    date_string_formatted = datetime.strptime(date_string, '%Y-%m-%d')
+    date_diff = date_string_formatted - today_date_formatted
+    days_diff = date_diff.days
+    return days_diff
 
 def get_climate_list(location, date):
     climate_list = compile_climate_data(location, date)
