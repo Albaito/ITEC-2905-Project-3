@@ -223,4 +223,7 @@ def user_add_prompt(location, cds, pois):
 def main():
     get_user_selection()
 
+if __name__ == '__main__':
+    main()
+
 main()
