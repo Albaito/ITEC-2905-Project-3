@@ -1,3 +1,8 @@
+'''
+This file calls Meteo's Historical Weather API to get historical weather data. It goes back one year and returns a week's worth of weather data, 
+including temperature, precipitation amount and precipitation duration.
+'''
+
 import requests
 from datetime import datetime
 from datetime import timedelta
@@ -5,8 +10,6 @@ from geocode_output import compile_geocode_data
 
 climate_url = 'https://archive-api.open-meteo.com/v1/archive?'
 
-location = 'berlin'
-date_string = '2023-01-06'
 daily_data = 'temperature_2m_min,temperature_2m_max,temperature_2m_mean,precipitation_sum,precipitation_hours'
 
 # convert date string to date object
@@ -23,7 +26,7 @@ def get_end_date(date):
     end_date = date - (timedelta(days = 362))
     return end_date
 
-# call climate API with parameters pulled from location and date input
+# call climate API with parameters pulled from geocode API response and user input
 def request_climate(loc, date_string):
     lat, long, tz = compile_geocode_data(loc)
     date = get_date(date_string)
@@ -38,10 +41,3 @@ def request_climate(loc, date_string):
     
     except Exception as e:
         print(e)
-
-def main():
-    response = request_climate(location, date_string)
-
-    pprint(response)
-
-main()

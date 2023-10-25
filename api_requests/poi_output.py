@@ -1,6 +1,12 @@
+'''
+This file processes the API response from Geoapify. It pulls name, city, latitude and longitude from each result
+and compiles them into a list of PointOfInterest objects.
+'''
+
 from poi_api import request_poi
 from class_defs import PointOfInterest
 
+# try to get the English name if it's available, otherwise the default name
 def get_name(response, count):
     # not all POIs have a 'name:en' value, so this will pull 'name' if there is a KeyError
     try: 
@@ -9,18 +15,25 @@ def get_name(response, count):
         poi_name = response['features'][count]['properties']['datasource']['raw']['name']
     return poi_name
 
-def get_city(response, count):
-    poi_city = response['features'][count]['properties']['city']
+# try to get the city, if no city is available use the location the user entered
+def get_city(response, count, location):
+    try:
+        poi_city = response['features'][count]['properties']['city']
+    except KeyError:
+        poi_city = location.capitalize()
     return poi_city
 
+# extract latitude
 def get_lat(response, count):
     poi_lat = response['features'][count]['properties']['lat']
     return poi_lat
 
+# extract longitude
 def get_long(response, count):
     poi_long = response['features'][count]['properties']['lon']
     return poi_long
 
+# compile data and return a list of PointOfInterest objects
 def compile_poi_data(location):
     response = request_poi(location)
     response_list = response['features']
@@ -28,7 +41,7 @@ def compile_poi_data(location):
     pois = []
     while count < len(response_list):
         name = get_name(response, count)
-        city = get_city(response, count)
+        city = get_city(response, count, location)
         lat = get_lat(response, count)
         long = get_long(response, count)
         poi_object = PointOfInterest(name, city, lat, long)

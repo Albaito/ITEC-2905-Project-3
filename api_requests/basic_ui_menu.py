@@ -1,3 +1,7 @@
+'''
+This file prints a table to act as a menu for the terminal UI.
+'''
+
 from prettytable import PrettyTable
 
 def menu_table():
@@ -8,7 +12,3 @@ def menu_table():
         menu_table.add_row([option_number, i])
         option_number = option_number + 1
     return menu_table
-
-def user_selection():
-    selection = input('What would you like to do? Enter a number: ')
-    return selection
