@@ -97,6 +97,8 @@ def get_all_POIs():
 
             for row in rows:
                 point_of_interest = PointOfInterest(row['name'], row['city'], row['lattitude'], row['longtitude'], row['id'])
+                point_of_interest.youtube_id = row['video_link']
+                point_of_interest.picture_link = row['picture_link']
                 pois.append(point_of_interest)
     except Exception as e:
         print(e)
