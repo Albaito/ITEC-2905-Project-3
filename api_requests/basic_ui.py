@@ -4,6 +4,7 @@ from datetime import date
 from poi_output import compile_poi_data
 from climate_output import compile_climate_data
 from geocode_output import geocode_validation
+from youtube_output import get_youtube_video
 from prettytable import PrettyTable
 
 def get_location():
@@ -57,6 +58,15 @@ def get_poi_list(location):
     poi_list = compile_poi_data(location)
     return poi_list
 
+def get_youtube_info(location):
+    title, id = get_youtube_video(location)
+    return title, id
+
+def build_youtube_url(id):
+    url_base = 'https://www.youtube.com/watch?v=x'
+    video_url = url_base + id
+    return video_url
+
 def build_climate_table(climate_list):
     climate_table = PrettyTable(['Day', 'High', 'Low', 'Precip Amount', 'Precip Duration'])
     for i in climate_list:
@@ -70,23 +80,34 @@ def build_poi_table(poi_list):
         poi_table.add_row([i.name, i.city, i.lat, i.long])
     return poi_table
 
+def build_youtube_table(title, id):
+    youtube_table = PrettyTable(['Video Title', 'URL'])
+    url = build_youtube_url(id)
+    youtube_table.add_row([title, url])
+    return youtube_table
+
 def get_tables():
     location = get_location()
     date = get_date()
     climate_list = get_climate_list(location, date)
     poi_list = get_poi_list(location)
+    video_title, video_id = get_youtube_video(location)
     climate_table = build_climate_table(climate_list)
     poi_table = build_poi_table(poi_list)
-    return climate_table, poi_table
+    youtube_table = build_youtube_table(video_title, video_id)
+    return climate_table, poi_table, youtube_table
 
 def print_tables():
-    climate_table, poi_table = get_tables()
+    climate_table, poi_table, youtube_table = get_tables()
     print('\n')
     print('Here is what the weather was like a year before that date: ')
     print(climate_table)
     print('\n')
     print('Here are some nearby points of interest to check out: ')
     print(poi_table)
+    print('\n')
+    print('Here is a YouTube video that might be about that location: ')
+    print(youtube_table)
 
 def main():
     print_tables()
