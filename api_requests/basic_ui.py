@@ -3,10 +3,17 @@ from datetime import datetime
 from datetime import date
 from poi_output import compile_poi_data
 from climate_output import compile_climate_data
+from geocode_output import geocode_validation
 from prettytable import PrettyTable
 
 def get_location():
     location = input('Please enter your destination city or country: ')
+    is_invalid = geocode_validation(location)
+    while is_invalid:
+        location = input('Invalid location. Check your spelling and try again: ')
+        is_invalid = geocode_validation(location)
+        if is_invalid == False:
+            break
     return location
 
 def get_date():

@@ -1,5 +1,4 @@
 from climate_api import request_climate
-from pprint import pprint
 from class_defs import ClimateDay
 
 def get_precip_time_list(response):

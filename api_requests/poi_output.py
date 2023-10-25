@@ -1,5 +1,4 @@
 from poi_api import request_poi
-from pprint import pprint
 from class_defs import PointOfInterest
 
 def get_name(response, count):
