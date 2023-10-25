@@ -42,11 +42,11 @@ class Bookmark:  # class used to receive data from DB
         ''' adds a list of POI data stored in points_of_interest property to the database'''
         poi_data = self.points_of_interest
 
-        insert_poi_sql = ''' insert into points_of_interests (id, name, city, lattitude, longtitude,) values (?, ?, ?, ?, ?)'''
+        insert_poi_sql = ''' insert into points_of_interests (id, name, city, lattitude, longtitude, video_link, picture_link) values (?, ?, ?, ?, ?, ?, ?)'''
 
         for poi in poi_data:
             with sqlite3.connect(db) as con:
-                con.execute(insert_poi_sql, (self.id, poi.name, poi.city, poi.lat, poi.long))
+                con.execute(insert_poi_sql, (self.id, poi.name, poi.city, poi.lat, poi.long, poi.youtube_id, poi.picture_link))
                 con.commit()
             con.close()
 
