@@ -24,3 +24,13 @@ in this way: As a webpage that displays
 the average daily weather, 
 points of interest and relevant photos and/or 
 videos. 
+
+## This is what the search page looks like
+![search](/Documentation/InputScreen.png) 
+
+## This is what the home page looks like
+![search](/Documentation/HomePageBookmark.png)
+
+
+## This is what the result page looks like
+![search](/Documentation/ResultPage.png)
