@@ -5,6 +5,7 @@ from poi_output import compile_poi_data
 from climate_output import compile_climate_data
 from geocode_output import geocode_validation
 from youtube_output import get_youtube_video
+from basic_ui_menu import *
 from prettytable import PrettyTable
 
 def get_location():
@@ -109,7 +110,38 @@ def print_tables():
     print('Here is a YouTube video that might be about that location: ')
     print(youtube_table)
 
+def get_user_selection():
+    menu = menu_table()
+    print(menu)
+    selection = user_selection()
+    selection_valid = user_selection_validation(selection)
+    if selection_valid == 1:
+        print_tables()
+    elif selection_valid == 2:
+        print('placeholder!!')
+    elif selection_valid == 3:
+        print('Thanks, bye!')
+        quit()
+
+def user_selection_validation(selection):
+    selection_int = user_selection_is_int(selection)
+    selection_list = [1, 2, 3]
+    while selection_int not in selection_list:
+        selection = input('Invalid selection. Try again: ')
+        selection_int = user_selection_is_int(selection)
+        if selection_int in selection_list:
+            break
+    print(selection_int)
+    return selection_int
+
+def user_selection_is_int(selection):
+    try:
+        selection = int(selection)
+        return selection
+    except ValueError:
+        return 4
+
 def main():
-    print_tables()
+    get_user_selection()
 
 main()
