@@ -34,11 +34,11 @@ def get_date():
         if format_valid:
             break
     
-    days_diff = date_range_validation(date_string)
-    while days_diff > 365:
+    date_valid = date_range_validation(date_string)
+    while date_valid == False:
         date_string = input('\nPlease enter a date within the next year: ')
-        days_diff = date_range_validation(date_string)
-        if days_diff < 365:
+        date_valid = date_range_validation(date_string)
+        if date_valid:
             break
     return date_string
 
@@ -59,7 +59,10 @@ def date_range_validation(date_string):
     date_string_formatted = datetime.strptime(date_string, '%Y-%m-%d')
     date_diff = date_string_formatted - today_date_formatted
     days_diff = date_diff.days
-    return days_diff
+    if days_diff > 365:
+        return False
+    else:
+        return True
 
 # get a list of climate data
 def get_climate_list(location, date):
@@ -78,7 +81,7 @@ def get_youtube_info(location):
 
 # build the youtube URL
 def build_youtube_url(id):
-    url_base = 'https://www.youtube.com/watch?v=x'
+    url_base = 'https://www.youtube.com/watch?v='
     video_url = url_base + id
     return video_url
 
@@ -225,5 +228,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-main()
